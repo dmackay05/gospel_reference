@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Family Scripture Study</title>
+<meta name="theme-color" content="#1c1815">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Scripture Study">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1c1815;
+    --card:#262019;
+    --card-2:#2e2620;
+    --gold:#c9a35f;
+    --gold-dim:#8a7549;
+    --parchment:#e8dfc8;
+    --clay:#9c8b76;
+    --border:#3a3128;
+    --done:#6b8a73;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--parchment);}
+  body{
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+    padding-bottom:28px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Lora',serif;}
+
+  header{
+    padding:28px 20px 18px;
+    position:sticky; top:0; z-index:5;
+    background:var(--bg);
+  }
+  header h1{
+    font-size:1.5rem; font-weight:600; margin:0;
+    color:var(--gold); letter-spacing:0.01em;
+  }
+  header p{margin:4px 0 0; font-size:0.8rem; color:var(--clay);}
+
+  main{padding:0 16px; max-width:640px; margin:0 auto;}
+
+  .section-label{
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--gold-dim); margin:22px 0 10px; font-weight:600;
+  }
+
+  /* ---- Family discussions drill-down ---- */
+  .fam-breadcrumb{display:flex; align-items:center; gap:6px; font-size:0.78rem; color:var(--gold-dim); margin-bottom:14px; cursor:pointer;}
+  .fam-breadcrumb .back-arrow{font-size:0.95rem;}
+  .fam-card{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; gap:12px;
+    transition:border-color .15s;
+  }
+  .fam-card:active{border-color:var(--gold-dim);}
+  .fam-card .fam-icon{font-size:1.3rem; min-width:28px; text-align:center;}
+  .fam-card .fam-body{flex:1; min-width:0;}
+  .fam-card .fam-title{font-family:'Lora',serif; font-weight:600; font-size:0.98rem; color:var(--parchment);}
+  .fam-card .fam-sub{font-size:0.78rem; color:var(--clay); margin-top:2px; line-height:1.4;}
+  .fam-card .fam-chevron{color:var(--gold-dim); font-size:0.85rem;}
+  .fam-card.done-marker .fam-icon{color:var(--done);}
+  .fam-progress-pip{font-size:0.68rem; color:var(--gold-dim); font-family:'DM Mono',monospace; margin-top:4px;}
+
+  .fam-topic-verse{
+    font-family:'Lora',serif; font-style:italic; color:var(--gold-dim); font-size:0.86rem;
+    margin:2px 0 10px; line-height:1.4;
+  }
+  .fam-topic-why{font-size:0.84rem; color:var(--clay); line-height:1.5; margin-bottom:16px;}
+
+  .fam-detail-header{margin-bottom:16px;}
+  .fam-detail-header .fam-detail-title{font-family:'Lora',serif; font-weight:600; font-size:1.15rem; color:var(--gold);}
+  .fam-detail-header .fam-detail-sub{font-size:0.8rem; color:var(--clay); margin-top:3px;}
+
+  .fam-passage-block{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:12px;}
+  .fam-passage-ref{font-family:'Lora',serif; font-weight:600; color:var(--gold); font-size:0.95rem;}
+  .fam-passage-source{font-size:0.68rem; color:var(--clay); font-style:italic; margin-bottom:8px;}
+  .fam-passage-text{font-family:'Lora',serif; font-style:italic; color:var(--parchment); font-size:0.92rem; line-height:1.6; margin:8px 0 12px; border-left:2px solid var(--gold-dim); padding-left:12px;}
+  .fam-context-label, .fam-question-label{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-dim); font-weight:600; margin:12px 0 6px;}
+  .fam-context-text{font-size:0.85rem; color:var(--clay); line-height:1.5;}
+  .fam-question-item{font-size:0.86rem; color:var(--parchment); line-height:1.5; margin-bottom:8px; padding-left:14px; position:relative;}
+  .fam-question-item:before{content:"—"; position:absolute; left:0; color:var(--gold-dim);}
+
+  .fam-closing-block{
+    background:var(--card-2); border:1px solid var(--gold-dim); border-radius:14px; padding:16px; margin-top:6px; margin-bottom:14px;
+  }
+  .fam-closing-label{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); font-weight:600; margin-bottom:6px;}
+  .fam-closing-text{font-family:'Lora',serif; font-style:italic; font-size:0.9rem; color:var(--parchment); line-height:1.55;}
+
+  .fam-complete-toggle{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:13px; border-radius:12px; border:1px solid var(--border);
+    background:var(--card-2); color:var(--clay); font-family:'DM Sans',sans-serif; font-weight:600; font-size:0.86rem;
+    cursor:pointer; margin-top:8px; margin-bottom:18px;
+  }
+  .fam-complete-toggle.is-done{background:var(--done); border-color:var(--done); color:var(--bg);}
+
+  .fam-reference-body{
+    font-size:0.86rem; color:var(--parchment); line-height:1.6; white-space:pre-wrap;
+    background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px;
+  }
+
+  .fam-day-setting{font-size:0.84rem; color:var(--clay); line-height:1.5; margin-bottom:14px; font-style:italic;}
+  .fam-day-theme{font-size:0.8rem; color:var(--gold-dim); margin-bottom:4px;}
+
+  /* ---- Topical Guide (reference index) ---- */
+  .ref-search{
+    width:100%; background:var(--card-2); border:1px solid var(--border); border-radius:12px;
+    padding:11px 14px; color:var(--parchment); font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    margin-bottom:16px;
+  }
+  .ref-search:focus{outline:none; border-color:var(--gold-dim);}
+  .ref-letter-label{
+    font-size:0.7rem; color:var(--gold-dim); font-family:'DM Mono',monospace; font-weight:600;
+    margin:16px 0 6px; letter-spacing:0.05em;
+  }
+  .ref-letter-label:first-of-type{margin-top:0;}
+  .ref-entry-card{
+    background:var(--card); border:1px solid var(--border); border-radius:12px;
+    padding:14px 16px; margin-bottom:8px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .ref-entry-card:active{border-color:var(--gold-dim);}
+  .ref-entry-term{font-family:'Lora',serif; font-weight:600; font-size:0.98rem; color:var(--parchment);}
+  .ref-entry-summary{font-size:0.78rem; color:var(--clay); margin-top:2px; line-height:1.4;}
+  .ref-entry-chevron{color:var(--gold-dim); font-size:0.85rem; flex-shrink:0;}
+
+  .ref-detail-term{font-family:'Lora',serif; font-weight:600; font-size:1.3rem; color:var(--gold); margin-bottom:4px;}
+  .ref-detail-summary{font-size:0.88rem; color:var(--parchment); font-style:italic; line-height:1.5; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--border);}
+  .ref-detail-body{font-size:0.87rem; color:var(--parchment); line-height:1.65; margin-bottom:20px;}
+
+  .ref-section-label{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-dim); font-weight:600; margin-bottom:8px;}
+  .ref-scripture-list{margin-bottom:20px;}
+  .ref-scripture-item{font-size:0.83rem; color:var(--clay); font-family:'DM Mono',monospace; padding:6px 0; border-bottom:1px solid var(--border);}
+  .ref-scripture-item:last-child{border-bottom:none;}
+
+  .ref-chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .ref-chip{
+    background:var(--card-2); border:1px solid var(--gold-dim); color:var(--gold);
+    border-radius:20px; padding:6px 14px; font-size:0.8rem; font-family:'DM Sans',sans-serif;
+    cursor:pointer;
+  }
+  .ref-chip:active{background:var(--gold-dim); color:var(--bg);}
+  .ref-empty{text-align:center; padding:40px 20px; color:var(--clay); font-size:0.85rem;}
+
+  /* ---- Scripture Index ---- */
+  .si-volume-card{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:16px; margin-bottom:10px; cursor:pointer;
+  }
+  .si-volume-name{font-family:'Lora',serif; font-weight:600; font-size:1.02rem; color:var(--gold);}
+  .si-volume-desc{font-size:0.82rem; color:var(--clay); margin-top:5px; line-height:1.45;}
+  .si-volume-meta{font-size:0.68rem; color:var(--gold-dim); font-family:'DM Mono',monospace; margin-top:8px;}
+
+  .si-theme-card{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:15px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .si-theme-name{font-family:'Lora',serif; font-weight:600; font-size:0.96rem; color:var(--parchment);}
+  .si-theme-count{font-size:0.7rem; color:var(--clay); margin-top:2px; font-family:'DM Mono',monospace;}
+
+  .si-verse-block{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:12px;}
+  .si-verse-ref{font-family:'Lora',serif; font-weight:600; color:var(--gold); font-size:0.95rem; margin-bottom:8px;}
+  .si-verse-text{font-family:'Lora',serif; font-style:italic; color:var(--parchment); font-size:0.9rem; line-height:1.55; border-left:2px solid var(--gold-dim); padding-left:12px; margin-bottom:10px;}
+  .si-verse-context-label{font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-dim); font-weight:600; margin-bottom:5px;}
+  .si-verse-context{font-size:0.84rem; color:var(--clay); line-height:1.5;}
+
+  .overview-strip{
+    display:flex; gap:8px; margin-bottom:20px; overflow-x:auto; padding-bottom:2px;
+  }
+  .overview-pill{
+    flex:none; background:var(--card-2); border:1px solid var(--border); border-radius:20px;
+    padding:8px 14px; font-size:0.72rem; color:var(--clay); font-family:'DM Mono',monospace; white-space:nowrap;
+  }
+  .overview-pill .n{color:var(--gold); font-weight:600;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="headerTitle">Family Scripture Study</h1>
+  <p id="headerSub">Guides you and Claude built together</p>
+</header>
+
+<main>
+  <section class="view active" id="view-discussions">
+    <div id="famOverview" class="overview-strip"></div>
+    <div id="famBreadcrumb" class="fam-breadcrumb" style="display:none;"></div>
+    <div id="famGuideList"></div>
+    <div id="famTopicList" style="display:none;"></div>
+    <div id="famSessionList" style="display:none;"></div>
+    <div id="famSessionDetail" style="display:none;"></div>
+    <div id="famReferenceDetail" style="display:none;"></div>
+    <div id="famDayList" style="display:none;"></div>
+    <div id="famDayDetail" style="display:none;"></div>
+    <div id="famRefIndexList" style="display:none;"></div>
+    <div id="famRefEntryDetail" style="display:none;"></div>
+    <div id="siVolumeList" style="display:none;"></div>
+    <div id="siThemeList" style="display:none;"></div>
+    <div id="siVerseList" style="display:none;"></div>
+  </section>
+</main>
+
+<script src="discussions.js"></script>
+<script>
+/* ============== STATE ============== */
+const STORAGE_KEY = 'family_scripture_study_v1';
+let state = {};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) state = Object.assign(state, JSON.parse(raw));
+  }catch(e){console.warn('load failed', e);}
+}
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+}
+
+/* ============== FAMILY DISCUSSIONS (drill-down) ============== */
+let famNav = { level: 'guides' };
+
+function famKey(guideId, sub){ return `fam_done_${guideId}${sub ? '_'+sub : ''}`; }
+function isFamDone(guideId, sub){ return !!state[famKey(guideId, sub)]; }
+function toggleFamDone(guideId, sub){
+  const k = famKey(guideId, sub);
+  state[k] = !state[k];
+  save();
+}
+
+function famShowOnly(id){
+  ['famGuideList','famTopicList','famSessionList','famSessionDetail','famReferenceDetail','famDayList','famDayDetail','famRefIndexList','famRefEntryDetail','siVolumeList','siThemeList','siVerseList'].forEach(x=>{
+    document.getElementById(x).style.display = (x===id) ? 'block' : 'none';
+  });
+}
+
+function famBreadcrumb(labelTrail, onBack){
+  const bc = document.getElementById('famBreadcrumb');
+  bc.style.display = 'flex';
+  bc.innerHTML = `<span class="back-arrow">‹</span> ${labelTrail}`;
+  bc.onclick = onBack;
+}
+function famHideBreadcrumb(){
+  document.getElementById('famBreadcrumb').style.display = 'none';
+}
+
+function totalSessionCount(){
+  let n = 0;
+  FAMILY_GUIDES.forEach(g => {
+    if (g.type === 'topics') n += g.topics.reduce((a,t)=>a+t.sessions.length, 0);
+    if (g.type === 'days') n += g.days.length;
+  });
+  return n;
+}
+function totalDoneCount(){
+  let n = 0;
+  FAMILY_GUIDES.forEach(g => {
+    if (g.type === 'topics') g.topics.forEach(t => t.sessions.forEach((s,i)=>{ if(isFamDone(g.id, t.id+'_s'+i)) n++; }));
+    if (g.type === 'days') g.days.forEach(d => { if(isFamDone(g.id, 'day'+d.day)) n++; });
+  });
+  return n;
+}
+
+function renderOverview(){
+  const el = document.getElementById('famOverview');
+  const done = totalDoneCount();
+  const total = totalSessionCount();
+  el.innerHTML = `
+    <div class="overview-pill"><span class="n">${done}</span> / ${total} sessions</div>
+    <div class="overview-pill">${FAMILY_GUIDES.length} guides</div>`;
+}
+
+function renderFamGuides(){
+  famNav = { level: 'guides' };
+  famHideBreadcrumb();
+  famShowOnly('famGuideList');
+  renderOverview();
+  const list = document.getElementById('famGuideList');
+  list.innerHTML = '';
+  const icons = { reference: '📄', days: '🗓️', topics: '🗂️', 'reference-index': '📖', 'scripture-index': '✨' };
+  FAMILY_GUIDES.forEach(g => {
+    const done = isFamDone(g.id);
+    const card = document.createElement('div');
+    card.className = 'fam-card' + (done ? ' done-marker' : '');
+    card.innerHTML = `
+      <div class="fam-icon">${done ? '✓' : icons[g.type] || '📄'}</div>
+      <div class="fam-body">
+        <div class="fam-title">${escapeHtml(g.title)}</div>
+        <div class="fam-sub">${escapeHtml(g.subtitle)}</div>
+      </div>
+      <div class="fam-chevron">›</div>`;
+    card.addEventListener('click', () => openFamGuide(g.id));
+    list.appendChild(card);
+  });
+}
+
+function openFamGuide(guideId){
+  const g = FAMILY_GUIDES.find(x => x.id === guideId);
+  if (!g) return;
+  if (g.type === 'reference') { renderFamReference(g); return; }
+  if (g.type === 'days') { renderFamDayList(g); return; }
+  if (g.type === 'topics') { renderFamTopicList(g); return; }
+  if (g.type === 'reference-index') { renderRefIndex(g); return; }
+  if (g.type === 'scripture-index') { renderSiVolumeList(g); return; }
+}
+
+function renderFamReference(g){
+  famNav = { level: 'reference', guideId: g.id };
+  famShowOnly('famReferenceDetail');
+  famBreadcrumb(escapeHtml(g.title), renderFamGuides);
+  const el = document.getElementById('famReferenceDetail');
+  const done = isFamDone(g.id);
+  el.innerHTML = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(g.title)}</div>
+      <div class="fam-detail-sub">${escapeHtml(g.subtitle)}</div>
+    </div>
+    <div class="fam-reference-body">${escapeHtml(g.content)}</div>
+    <div class="fam-complete-toggle ${done?'is-done':''}" id="famRefToggle">${done ? '✓ Read' : 'Mark as read'}</div>`;
+  document.getElementById('famRefToggle').addEventListener('click', () => {
+    toggleFamDone(g.id);
+    renderFamReference(g);
+  });
+}
+
+function renderFamDayList(g){
+  famNav = { level: 'days', guideId: g.id };
+  famShowOnly('famDayList');
+  famBreadcrumb(escapeHtml(g.title), renderFamGuides);
+  const el = document.getElementById('famDayList');
+  el.innerHTML = `<div class="fam-topic-why">${escapeHtml(g.intro || '')}</div>`;
+  g.days.forEach(d => {
+    const done = isFamDone(g.id, 'day'+d.day);
+    const card = document.createElement('div');
+    card.className = 'fam-card' + (done ? ' done-marker' : '');
+    card.innerHTML = `
+      <div class="fam-icon">${done ? '✓' : 'Day ' + d.day}</div>
+      <div class="fam-body">
+        <div class="fam-title">${escapeHtml(d.title)}</div>
+        <div class="fam-sub">${escapeHtml(d.passage)}</div>
+      </div>
+      <div class="fam-chevron">›</div>`;
+    card.addEventListener('click', () => renderFamDayDetail(g, d));
+    el.appendChild(card);
+  });
+}
+
+function renderFamDayDetail(g, d){
+  famNav = { level: 'day', guideId: g.id, dayNum: d.day };
+  famShowOnly('famDayDetail');
+  famBreadcrumb(`${escapeHtml(g.title)} / Day ${d.day}`, () => renderFamDayList(g));
+  const el = document.getElementById('famDayDetail');
+  const done = isFamDone(g.id, 'day'+d.day);
+  let html = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(d.title)}</div>
+      <div class="fam-detail-sub">${escapeHtml(d.passage)}</div>
+    </div>
+    <div class="fam-day-theme">${escapeHtml(d.theme)}</div>
+    <div class="fam-day-setting">${escapeHtml(d.setting)}</div>`;
+  d.verses.forEach(v => {
+    html += `
+      <div class="fam-passage-block">
+        <div class="fam-passage-ref">${escapeHtml(v.ref)}</div>
+        <div class="fam-passage-text">${escapeHtml(v.text)}</div>
+        <div class="fam-context-label">Context</div>
+        <div class="fam-context-text">${escapeHtml(v.context)}</div>
+        <div class="fam-question-label">Discussion</div>
+        ${v.questions.map(q => `<div class="fam-question-item">${escapeHtml(q)}</div>`).join('')}
+      </div>`;
+  });
+  html += `
+    <div class="fam-closing-block">
+      <div class="fam-closing-label">Closing Question</div>
+      <div class="fam-closing-text">${escapeHtml(d.closing)}</div>
+    </div>
+    <div class="fam-complete-toggle ${done?'is-done':''}" id="famDayToggle">${done ? '✓ Day complete' : 'Mark day complete'}</div>`;
+  el.innerHTML = html;
+  document.getElementById('famDayToggle').addEventListener('click', () => {
+    toggleFamDone(g.id, 'day'+d.day);
+    renderFamDayDetail(g, d);
+  });
+}
+
+function renderFamTopicList(g){
+  famNav = { level: 'topics', guideId: g.id };
+  famShowOnly('famTopicList');
+  famBreadcrumb(escapeHtml(g.title), renderFamGuides);
+  const el = document.getElementById('famTopicList');
+  el.innerHTML = `<div class="fam-topic-why">${escapeHtml(g.intro || '')}</div>`;
+  g.topics.forEach(t => {
+    const doneCount = t.sessions.filter((s,i)=>isFamDone(g.id, t.id+'_s'+i)).length;
+    const card = document.createElement('div');
+    card.className = 'fam-card';
+    card.innerHTML = `
+      <div class="fam-icon">🗂️</div>
+      <div class="fam-body">
+        <div class="fam-title">${escapeHtml(t.title)}</div>
+        <div class="fam-sub">${escapeHtml(t.question)}</div>
+        <div class="fam-progress-pip">${doneCount} of ${t.sessions.length} sessions</div>
+      </div>
+      <div class="fam-chevron">›</div>`;
+    card.addEventListener('click', () => renderFamSessionList(g, t));
+    el.appendChild(card);
+  });
+}
+
+function renderFamSessionList(g, t){
+  famNav = { level: 'sessions', guideId: g.id, topicId: t.id };
+  famShowOnly('famSessionList');
+  famBreadcrumb(`${escapeHtml(g.title)} / ${escapeHtml(t.title)}`, () => renderFamTopicList(g));
+  const el = document.getElementById('famSessionList');
+  el.innerHTML = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(t.title)}</div>
+      <div class="fam-detail-sub">${escapeHtml(t.question)}</div>
+    </div>
+    <div class="fam-topic-verse">${t.verse}</div>
+    <div class="fam-topic-why">${escapeHtml(t.why)}</div>`;
+  t.sessions.forEach((s, i) => {
+    const done = isFamDone(g.id, t.id+'_s'+i);
+    const card = document.createElement('div');
+    card.className = 'fam-card' + (done ? ' done-marker' : '');
+    card.innerHTML = `
+      <div class="fam-icon">${done ? '✓' : 'S' + (i+1)}</div>
+      <div class="fam-body">
+        <div class="fam-title">${escapeHtml(s.title)}</div>
+        <div class="fam-sub">${escapeHtml(s.passage)}</div>
+      </div>
+      <div class="fam-chevron">›</div>`;
+    card.addEventListener('click', () => renderFamSessionDetail(g, t, s, i));
+    el.appendChild(card);
+  });
+}
+
+function renderFamSessionDetail(g, t, s, idx){
+  famNav = { level: 'session', guideId: g.id, topicId: t.id, sessionIdx: idx };
+  famShowOnly('famSessionDetail');
+  famBreadcrumb(`${escapeHtml(t.title)} / Session ${idx+1}`, () => renderFamSessionList(g, t));
+  const el = document.getElementById('famSessionDetail');
+  const done = isFamDone(g.id, t.id+'_s'+idx);
+  let html = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(s.title)}</div>
+      <div class="fam-detail-sub">${escapeHtml(s.focus)}</div>
+    </div>`;
+  s.passages.forEach(p => {
+    html += `
+      <div class="fam-passage-block">
+        <div class="fam-passage-ref">${escapeHtml(p.ref)}</div>
+        <div class="fam-passage-source">${escapeHtml(p.source)}</div>
+        <div class="fam-passage-text">${escapeHtml(p.text)}</div>
+        <div class="fam-context-label">Context</div>
+        <div class="fam-context-text">${escapeHtml(p.context)}</div>
+        <div class="fam-question-label">Discussion</div>
+        ${p.questions.map(q => `<div class="fam-question-item">${escapeHtml(q)}</div>`).join('')}
+      </div>`;
+  });
+  html += `
+    <div class="fam-closing-block">
+      <div class="fam-closing-label">Take This Into Your Week</div>
+      <div class="fam-closing-text">${escapeHtml(s.closing)}</div>
+    </div>
+    <div class="fam-complete-toggle ${done?'is-done':''}" id="famSessionToggle">${done ? '✓ Session complete' : 'Mark session complete'}</div>`;
+  el.innerHTML = html;
+  document.getElementById('famSessionToggle').addEventListener('click', () => {
+    toggleFamDone(g.id, t.id+'_s'+idx);
+    renderFamSessionDetail(g, t, s, idx);
+  });
+}
+
+/* ============== TOPICAL GUIDE (reference-index: Bible Dictionary style) ============== */
+function getRefGuide(){
+  return FAMILY_GUIDES.find(g => g.type === 'reference-index');
+}
+
+function renderRefIndex(g, filterText){
+  famNav = { level: 'ref-index', guideId: g.id };
+  famShowOnly('famRefIndexList');
+  famBreadcrumb(escapeHtml(g.title), renderFamGuides);
+  const el = document.getElementById('famRefIndexList');
+  const sorted = [...g.entries].sort((a,b) => a.term.localeCompare(b.term));
+  const q = (filterText || '').trim().toLowerCase();
+  const filtered = q ? sorted.filter(e => e.term.toLowerCase().includes(q) || e.summary.toLowerCase().includes(q)) : sorted;
+
+  let html = `<div class="fam-topic-why">${escapeHtml(g.intro || '')}</div>
+    <input type="text" class="ref-search" id="refSearchInput" placeholder="Search topics..." value="${escapeHtml(filterText||'')}">`;
+
+  if (!filtered.length) {
+    html += `<div class="ref-empty">No topics match "${escapeHtml(filterText)}"</div>`;
+  } else {
+    let lastLetter = null;
+    filtered.forEach(entry => {
+      const letter = entry.term[0].toUpperCase();
+      if (letter !== lastLetter) {
+        html += `<div class="ref-letter-label">${letter}</div>`;
+        lastLetter = letter;
+      }
+      html += `
+        <div class="ref-entry-card" data-entry="${entry.id}">
+          <div>
+            <div class="ref-entry-term">${escapeHtml(entry.term)}</div>
+            <div class="ref-entry-summary">${escapeHtml(entry.summary)}</div>
+          </div>
+          <div class="ref-entry-chevron">›</div>
+        </div>`;
+    });
+  }
+  el.innerHTML = html;
+
+  const searchInput = document.getElementById('refSearchInput');
+  searchInput.addEventListener('input', (e) => {
+    const cursorPos = e.target.selectionStart;
+    renderRefIndex(g, e.target.value);
+    const newInput = document.getElementById('refSearchInput');
+    newInput.focus();
+    newInput.setSelectionRange(cursorPos, cursorPos);
+  });
+  el.querySelectorAll('.ref-entry-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const entry = g.entries.find(x => x.id === card.dataset.entry);
+      renderRefEntryDetail(g, entry);
+    });
+  });
+}
+
+function renderRefEntryDetail(g, entry){
+  famNav = { level: 'ref-entry', guideId: g.id, entryId: entry.id };
+  famShowOnly('famRefEntryDetail');
+  famBreadcrumb(`${escapeHtml(g.title)} / ${escapeHtml(entry.term)}`, () => renderRefIndex(g));
+  const el = document.getElementById('famRefEntryDetail');
+
+  let html = `
+    <div class="ref-detail-term">${escapeHtml(entry.term)}</div>
+    <div class="ref-detail-summary">${escapeHtml(entry.summary)}</div>
+    <div class="ref-detail-body">${escapeHtml(entry.body)}</div>`;
+
+  if (entry.scriptures && entry.scriptures.length) {
+    html += `<div class="ref-section-label">Key Scriptures</div>
+      <div class="ref-scripture-list">${entry.scriptures.map(s => `<div class="ref-scripture-item">${escapeHtml(s)}</div>`).join('')}</div>`;
+  }
+
+  if (entry.crossRefs && entry.crossRefs.length) {
+    html += `<div class="ref-section-label">See Also</div>
+      <div class="ref-chip-row">${entry.crossRefs.map(term => `<div class="ref-chip" data-term="${escapeHtml(term)}">${escapeHtml(term)}</div>`).join('')}</div>`;
+  }
+
+  el.innerHTML = html;
+
+  el.querySelectorAll('.ref-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const target = g.entries.find(x => x.term === chip.dataset.term);
+      if (target) renderRefEntryDetail(g, target);
+    });
+  });
+}
+
+/* ============== SCRIPTURE INDEX (volume -> theme -> verses) ============== */
+function renderSiVolumeList(g){
+  famNav = { level: 'si-volumes', guideId: g.id };
+  famShowOnly('siVolumeList');
+  famBreadcrumb(escapeHtml(g.title), renderFamGuides);
+  const el = document.getElementById('siVolumeList');
+  let html = `<div class="fam-topic-why">${escapeHtml(g.intro || '')}</div>`;
+  g.volumes.forEach(v => {
+    const verseCount = v.themes.reduce((a,t)=>a+t.verses.length, 0);
+    html += `
+      <div class="si-volume-card" data-volume="${v.id}">
+        <div class="si-volume-name">${escapeHtml(v.name)}</div>
+        <div class="si-volume-desc">${escapeHtml(v.description)}</div>
+        <div class="si-volume-meta">${v.themes.length} themes · ${verseCount} key passages</div>
+      </div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.si-volume-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const v = g.volumes.find(x => x.id === card.dataset.volume);
+      renderSiThemeList(g, v);
+    });
+  });
+}
+
+function renderSiThemeList(g, v){
+  famNav = { level: 'si-themes', guideId: g.id, volumeId: v.id };
+  famShowOnly('siThemeList');
+  famBreadcrumb(`${escapeHtml(g.title)} / ${escapeHtml(v.name)}`, () => renderSiVolumeList(g));
+  const el = document.getElementById('siThemeList');
+  let html = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(v.name)}</div>
+      <div class="fam-detail-sub">${escapeHtml(v.description)}</div>
+    </div>`;
+  v.themes.forEach(t => {
+    html += `
+      <div class="si-theme-card" data-theme="${t.id}">
+        <div>
+          <div class="si-theme-name">${escapeHtml(t.name)}</div>
+          <div class="si-theme-count">${t.verses.length} passages</div>
+        </div>
+        <div class="fam-chevron">›</div>
+      </div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.si-theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const t = v.themes.find(x => x.id === card.dataset.theme);
+      renderSiVerseList(g, v, t);
+    });
+  });
+}
+
+function renderSiVerseList(g, v, t){
+  famNav = { level: 'si-verses', guideId: g.id, volumeId: v.id, themeId: t.id };
+  famShowOnly('siVerseList');
+  famBreadcrumb(`${escapeHtml(v.name)} / ${escapeHtml(t.name)}`, () => renderSiThemeList(g, v));
+  const el = document.getElementById('siVerseList');
+  let html = `
+    <div class="fam-detail-header">
+      <div class="fam-detail-title">${escapeHtml(t.name)}</div>
+      <div class="fam-detail-sub">${escapeHtml(v.name)}</div>
+    </div>`;
+  t.verses.forEach(verse => {
+    html += `
+      <div class="si-verse-block">
+        <div class="si-verse-ref">${escapeHtml(verse.ref)}</div>
+        <div class="si-verse-text">${escapeHtml(verse.text)}</div>
+        <div class="si-verse-context-label">Context</div>
+        <div class="si-verse-context">${escapeHtml(verse.context)}</div>
+      </div>`;
+  });
+  el.innerHTML = html;
+}
+
+/* ============== INIT ============== */
+load();
+renderFamGuides();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW failed', e));
+  });
+}
+</script>
+</body>
+</html>
