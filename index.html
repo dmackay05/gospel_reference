@@ -138,6 +138,9 @@
   .ref-section-label{font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold-dim); font-weight:600; margin-bottom:8px;}
   .ref-scripture-list{margin-bottom:20px;}
   .ref-scripture-item{font-size:0.83rem; color:var(--clay); font-family:'DM Mono',monospace; padding:6px 0; border-bottom:1px solid var(--border);}
+  .scripture-link{color:var(--gold); cursor:pointer; text-decoration:underline; text-decoration-color:var(--gold-dim); text-underline-offset:2px;}
+  .scripture-link:active{opacity:0.7;}
+  .ref-sep{color:var(--clay); margin:0 2px;}
   .ref-scripture-item:last-child{border-bottom:none;}
 
   .ref-chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
@@ -364,14 +367,14 @@ function renderFamDayDetail(g, d){
   let html = `
     <div class="fam-detail-header">
       <div class="fam-detail-title">${escapeHtml(d.title)}</div>
-      <div class="fam-detail-sub">${escapeHtml(d.passage)}</div>
+      <div class="fam-detail-sub">${renderScriptureRefs(d.passage)}</div>
     </div>
     <div class="fam-day-theme">${escapeHtml(d.theme)}</div>
     <div class="fam-day-setting">${escapeHtml(d.setting)}</div>`;
   d.verses.forEach(v => {
     html += `
       <div class="fam-passage-block">
-        <div class="fam-passage-ref">${escapeHtml(v.ref)}</div>
+        <div class="fam-passage-ref">${renderScriptureRefs(v.ref)}</div>
         <div class="fam-passage-text">${escapeHtml(v.text)}</div>
         <div class="fam-context-label">Context</div>
         <div class="fam-context-text">${escapeHtml(v.context)}</div>
@@ -457,7 +460,7 @@ function renderFamSessionDetail(g, t, s, idx){
   s.passages.forEach(p => {
     html += `
       <div class="fam-passage-block">
-        <div class="fam-passage-ref">${escapeHtml(p.ref)}</div>
+        <div class="fam-passage-ref">${renderScriptureRefs(p.ref)}</div>
         <div class="fam-passage-source">${escapeHtml(p.source)}</div>
         <div class="fam-passage-text">${escapeHtml(p.text)}</div>
         <div class="fam-context-label">Context</div>
@@ -547,7 +550,7 @@ function renderRefEntryDetail(g, entry){
 
   if (entry.scriptures && entry.scriptures.length) {
     html += `<div class="ref-section-label">Key Scriptures</div>
-      <div class="ref-scripture-list">${entry.scriptures.map(s => `<div class="ref-scripture-item">${escapeHtml(s)}</div>`).join('')}</div>`;
+      <div class="ref-scripture-list">${entry.scriptures.map(s => `<div class="ref-scripture-item">${renderScriptureRefs(s)}</div>`).join('')}</div>`;
   }
 
   if (entry.crossRefs && entry.crossRefs.length) {
@@ -632,7 +635,7 @@ function renderSiVerseList(g, v, t){
   t.verses.forEach(verse => {
     html += `
       <div class="si-verse-block">
-        <div class="si-verse-ref">${escapeHtml(verse.ref)}</div>
+        <div class="si-verse-ref">${renderScriptureRefs(verse.ref)}</div>
         <div class="si-verse-text">${escapeHtml(verse.text)}</div>
         <div class="si-verse-context-label">Context</div>
         <div class="si-verse-context">${escapeHtml(verse.context)}</div>
@@ -640,6 +643,84 @@ function renderSiVerseList(g, v, t){
   });
   el.innerHTML = html;
 }
+
+/* ============== SCRIPTURE LINKING ============== */
+// Maps a book name (lowercased, dashes normalized) to [volume-slug, book-slug]
+// used to build churchofjesuschrist.org study URLs.
+const SCRIPTURE_BOOKS = {
+  // Old Testament
+  "genesis":["ot","gen"], "exodus":["ot","ex"], "leviticus":["ot","lev"], "numbers":["ot","num"], "deuteronomy":["ot","deut"],
+  "joshua":["ot","josh"], "judges":["ot","judg"], "ruth":["ot","ruth"],
+  "1 samuel":["ot","1-sam"], "2 samuel":["ot","2-sam"], "1 kings":["ot","1-kgs"], "2 kings":["ot","2-kgs"],
+  "1 chronicles":["ot","1-chr"], "2 chronicles":["ot","2-chr"], "ezra":["ot","ezra"], "nehemiah":["ot","neh"], "esther":["ot","esth"],
+  "job":["ot","job"], "psalm":["ot","ps"], "psalms":["ot","ps"], "proverbs":["ot","prov"], "ecclesiastes":["ot","eccl"], "song of solomon":["ot","song"],
+  "isaiah":["ot","isa"], "jeremiah":["ot","jer"], "lamentations":["ot","lam"], "ezekiel":["ot","ezek"], "daniel":["ot","dan"],
+  "hosea":["ot","hosea"], "joel":["ot","joel"], "amos":["ot","amos"], "obadiah":["ot","obad"], "jonah":["ot","jonah"], "micah":["ot","micah"],
+  "nahum":["ot","nahum"], "habakkuk":["ot","hab"], "zephaniah":["ot","zeph"], "haggai":["ot","hag"], "zechariah":["ot","zech"], "malachi":["ot","mal"],
+  // New Testament
+  "matthew":["nt","matt"], "mark":["nt","mark"], "luke":["nt","luke"], "john":["nt","john"], "acts":["nt","acts"],
+  "romans":["nt","rom"], "1 corinthians":["nt","1-cor"], "2 corinthians":["nt","2-cor"], "galatians":["nt","gal"],
+  "ephesians":["nt","eph"], "philippians":["nt","philip"], "colossians":["nt","col"],
+  "1 thessalonians":["nt","1-thes"], "2 thessalonians":["nt","2-thes"], "1 timothy":["nt","1-tim"], "2 timothy":["nt","2-tim"],
+  "titus":["nt","titus"], "philemon":["nt","philem"], "hebrews":["nt","heb"], "james":["nt","james"],
+  "1 peter":["nt","1-pet"], "2 peter":["nt","2-pet"], "1 john":["nt","1-jn"], "2 john":["nt","2-jn"], "3 john":["nt","3-jn"],
+  "jude":["nt","jude"], "revelation":["nt","rev"],
+  // Book of Mormon
+  "1 nephi":["bofm","1-ne"], "2 nephi":["bofm","2-ne"], "jacob":["bofm","jacob"], "enos":["bofm","enos"], "jarom":["bofm","jarom"],
+  "omni":["bofm","omni"], "words of mormon":["bofm","w-of-m"], "mosiah":["bofm","mosiah"], "alma":["bofm","alma"],
+  "helaman":["bofm","hel"], "3 nephi":["bofm","3-ne"], "4 nephi":["bofm","4-ne"], "mormon":["bofm","morm"],
+  "ether":["bofm","ether"], "moroni":["bofm","moro"],
+  // Doctrine & Covenants
+  "d&c":["dc-testament","dc"], "doctrine and covenants":["dc-testament","dc"],
+  "official declaration":["dc-testament","od"],
+  // Pearl of Great Price
+  "moses":["pgp","moses"], "abraham":["pgp","abr"],
+  "joseph smith-matthew":["pgp","js-m"], "joseph smith-history":["pgp","js-h"],
+  "articles of faith":["pgp","a-of-f"]
+};
+
+// Parses a single reference like "1 Nephi 3:7" or "D&C 121:1-8" or "Official Declaration 2"
+// and returns a churchofjesuschrist.org study URL, or null if it can't be parsed.
+function scriptureUrlFor(rawRef){
+  const piece = rawRef.trim();
+  const m = piece.match(/^(.*?)\s+(\d+)(?::(\d+))?/);
+  if (!m) return null;
+  const bookKey = m[1].trim().toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+  const entry = SCRIPTURE_BOOKS[bookKey];
+  if (!entry) return null;
+  const [volume, slug] = entry;
+  const chapter = m[2];
+  const verse = m[3];
+  let url = `https://www.churchofjesuschrist.org/study/scriptures/${volume}/${slug}/${chapter}?lang=eng`;
+  if (verse) url += `&id=p${verse}#p${verse}`;
+  return url;
+}
+
+// Fallback for references we can't confidently parse (e.g. "Book of Mormon Title Page")
+function scriptureFallbackUrl(rawRef){
+  return `https://www.google.com/search?q=${encodeURIComponent(rawRef.trim() + ' site:churchofjesuschrist.org')}`;
+}
+
+// Turns a reference string — which may contain multiple refs separated by " / " —
+// into HTML with each individual reference wrapped as a clickable span.
+function renderScriptureRefs(rawString){
+  if (!rawString) return '';
+  return rawString.split(/\s*\/\s*/).map(piece => {
+    const p = piece.trim();
+    if (!p) return '';
+    return `<span class="scripture-link" data-ref="${escapeHtml(p)}">${escapeHtml(p)}</span>`;
+  }).filter(Boolean).join(' <span class="ref-sep">/</span> ');
+}
+
+// Single delegated listener handles every scripture link in the app, present or future.
+document.addEventListener('click', (e) => {
+  const target = e.target.closest('.scripture-link');
+  if (!target) return;
+  e.stopPropagation();
+  const ref = target.dataset.ref;
+  const url = scriptureUrlFor(ref) || scriptureFallbackUrl(ref);
+  window.open(url, '_blank', 'noopener');
+});
 
 /* ============== INIT ============== */
 load();
