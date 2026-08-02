@@ -3004,3 +3004,204 @@ SCRIPTURE_INDEX.volumes.push(DC_VOLUME);
 SCRIPTURE_INDEX.volumes.push(PGP_VOLUME);
 
 FAMILY_GUIDES.push(SCRIPTURE_INDEX);
+
+/* ============================================================
+   HARD QUESTIONS — topical guide for difficult passages & doubts
+   ============================================================ */
+
+const HARD_QUESTIONS = {
+  id: "hard-questions",
+  type: "topics",
+  title: "Hard Questions",
+  subtitle: "Honest conversations about scripture's hardest parts",
+  intro: "Some passages are genuinely difficult — troubling laws, violence, questions about how scripture was written, or just not being sure what you believe. This guide doesn't smooth those over. The goal is to look directly at what's hard and talk about it honestly, together. Nobody has to land on an answer by the end of a session.",
+  topics: [
+    {
+      id: "hard-law",
+      title: "Troubling Laws & Violence",
+      question: "Why does the Old Testament contain laws and violence that horrify us?",
+      verse: "\u201CThou shalt not surely die: for he is his money\u201D",
+      why: "Parts of the Old Testament describe slavery, harsh punishments, and warfare in ways that clash hard with what we believe about God's character. Pretending these passages aren't there, or rushing to explain them away, teaches kids that faith requires looking away from hard things. It doesn't. These sessions look straight at two of the hardest categories — ancient slave law and conquest violence — and talk about what to do with the tension.",
+      sessions: [
+        {
+          title: "The Slave Laws of Exodus",
+          passage: "Exodus 21:2-6 / Exodus 21:20-21",
+          focus: "Ancient Near Eastern law codes inside the Law of Moses",
+          passages: [
+            {
+              ref: "Exodus 21:2-6",
+              source: "Old Testament",
+              text: "If thou buy an Hebrew servant, six years he shall serve: and in the seventh he shall go out free for nothing... But if the servant shall plainly say, I love my master, my wife, and my children; I will not go out free: Then his master shall bring him unto the judges... and he shall serve him for ever.",
+              context: "This law limits Hebrew servitude to six years, unlike the surrounding cultures' laws which often had no such limit. It's regulation of an existing ancient institution, not God inventing slavery. Reading it honestly means holding both things at once: it is more humane than neighboring law codes, and it still permits something we now recognize as a serious moral wrong.",
+              questions: [
+                "This law limits servitude to six years — better than most ancient law codes, but still slavery. Why might God regulate something instead of banning it outright?",
+                "Does knowing this was 'better than the neighbors' change how troubling it is to you? Why or why not?",
+                "The servant who chooses to stay forever gets his ear pierced as a sign. What do you think that ritual meant to the people living it?"
+              ]
+            },
+            {
+              ref: "Exodus 21:20-21",
+              source: "Old Testament",
+              text: "And if a man smite his servant, or his maid, with a rod, and he die under his hand; he shall be surely punished. Notwithstanding, if he continue a day or two, he shall not be punished: for he is his money.",
+              context: "This is one of the most difficult verses in the whole Old Testament — it explicitly treats an enslaved person's survival in terms of the owner's property loss. There's no version of this that reads as anything but morally troubling by today's standards, and by many ancient standards too. It's worth naming plainly rather than softening.",
+              questions: [
+                "Is it okay to say a verse in scripture is just morally wrong by today's understanding? What would it mean if we couldn't say that?",
+                "Latter-day Saints believe scripture was written by real, culturally-limited people trying to record God's will, not dictated word-for-word (see 2 Nephi 29:10 next session). Does that framework help here, or does it dodge the problem?",
+                "The Church itself once required a revelation to fully reverse a policy many members had defended using scripture (the priesthood/temple restriction lifted in 1978). What does that history teach us about reading hard passages with humility?"
+              ]
+            }
+          ],
+          closing: "It's possible to trust that scripture points toward God and still say plainly: this specific verse reflects the limits of the people who wrote it down, not God's final word on human worth. Holding both of those at once is not a loss of faith — it might be what mature faith looks like."
+        },
+        {
+          title: "When God's People Are Told to Fight",
+          passage: "Deuteronomy 20:16-18 / 1 Samuel 15:2-3",
+          focus: "Conquest violence and the herem (\u201Cdevoted to destruction\u201D) commands",
+          passages: [
+            {
+              ref: "Deuteronomy 20:16-18",
+              source: "Old Testament",
+              text: "But of the cities of these people, which the Lord thy God doth give thee for an inheritance, thou shalt save alive nothing that breatheth: But thou shalt utterly destroy them... that they teach you not to do after all their abominations.",
+              context: "Scholars widely debate whether these commands describe events that actually happened as described, are later theological writing meant to explain Israel's identity rather than literal history, or reflect standard ancient Near Eastern war rhetoric where total-destruction language was common hyperbole. Archaeological evidence for wholesale destruction matching the text is thin in many cases. That range of possibilities is itself useful to know — it's not settled, even among believing scholars.",
+              questions: [
+                "Does it change how you read this passage to know that many scholars — including faithful ones — think this language may be more symbolic than a literal battle report?",
+                "Why might a later generation write their origin story with this kind of severity, even if the details were exaggerated?",
+                "What's the difference between saying 'this happened and God commanded it' and 'this reflects how ancient Israel understood its own story'?"
+              ]
+            },
+            {
+              ref: "1 Samuel 15:2-3",
+              source: "Old Testament",
+              text: "Thus saith the Lord of hosts... Now go and smite Amalek, and utterly destroy all that they have, and spare them not; but slay both man and woman, infant and suckling.",
+              context: "This command against the Amalekites is one of the hardest verses in the Old Testament to reconcile with the character of God taught elsewhere in scripture — including by later prophets who explicitly build toward a God who commands mercy, not one who commands the killing of infants. Latter-day Saint teaching holds that scripture is 'the word of God as far as it is translated correctly' (Articles of Faith 1:8) and that understanding of God's character develops across scripture, culminating in Christ.",
+              questions: [
+                "If Christ is the fullest revelation of God's character (see John 14:9), how do we weigh a verse like this against what Christ taught and did?",
+                "Is it possible this reflects what ancient Israel believed God commanded, rather than an accurate transcript of what God actually said? What would that mean for how we read the rest of the Old Testament?",
+                "What do you do with a scripture that seems to conflict with what you know to be true about God's character from elsewhere?"
+              ]
+            }
+          ],
+          closing: "The Old Testament doesn't hide its hardest moments, and neither should we. Learning to say 'this troubles me, and I don't think it's the final word on who God is' can be more honest — and more faithful — than forcing every verse into a tidy resolution."
+        }
+      ]
+    },
+    {
+      id: "how-scripture-came",
+      title: "How the Scriptures Came to Be",
+      question: "Did God write this, or did people?",
+      verse: "\u201CThese last records... shall establish the truth of the first\u201D",
+      why: "Kids eventually ask whether the Bible fell from the sky or was written by human hands over centuries. LDS theology already has a built-in answer to this, and it's a more interesting one than 'God dictated every word.' These sessions use scripture's own claims about itself — including the Book of Mormon and D&C's own admitted imperfections — to talk honestly about how these books came together.",
+      sessions: [
+        {
+          title: "Many Hands, One Message",
+          passage: "2 Nephi 29:10 / D&C 1:24",
+          focus: "Scripture claims its own human, developing, compiled nature",
+          passages: [
+            {
+              ref: "2 Nephi 29:10",
+              source: "Book of Mormon",
+              text: "For behold, I shall speak unto the Jews and they shall write it; and I shall also speak unto the Nephites and they shall write it; and I shall also speak unto the other tribes... and they shall write it also.",
+              context: "This verse explicitly frames scripture as multiple separate records, written by different peoples across different eras, that all still count as scripture — not one single perfect transmission. The Book of Mormon presents itself as exactly this kind of layered record: multiple authors (Nephi, Mormon, Moroni) compiling and abridging centuries of earlier writings, openly.",
+              questions: [
+                "This verse describes scripture as many different groups writing down what they heard, in their own words and time. How is that different from the idea of one perfect dictated text?",
+                "The Book of Mormon itself is presented as a compiled abridgment by later editors (Mormon, Moroni) working from centuries of earlier records. Does that change how you think biblical books like Genesis or Exodus might have come together?",
+                "If scripture is written by real people trying their best to record God's word, what does that mean for passages that seem to reflect their time and place rather than eternal truth (like last week's discussion)?"
+              ]
+            },
+            {
+              ref: "D&C 1:24",
+              source: "Doctrine & Covenants",
+              text: "Behold, I am God and have spoken it; these commandments are of me, and were given unto my servants in their weakness, after the manner of their language, that they might come to understanding.",
+              context: "This is a remarkable admission built directly into modern scripture: God says the commandments were given 'after the manner of their language' and 'in their weakness' — meaning the wording is shaped by human limitation, even when the underlying message is divine. This gives Latter-day Saints a built-in framework for reading ancient scripture the same way.",
+              questions: [
+                "God says here that even modern revelation comes through human 'weakness' and language. What does that suggest about how much weight to put on the exact wording of ancient scripture versus its underlying message?",
+                "Does it feel unsettling or freeing that God works through imperfect human language on purpose, rather than overriding it?",
+                "Joseph Smith revised his own revelations over time (compare early and later versions of some D&C sections). What does that tell us about how revelation and human involvement work together?"
+              ]
+            }
+          ],
+          closing: "Scripture tells us, in its own words, that it comes through real people doing their honest best with limited language and understanding. That's not a weakness to hide from — it's the model scripture gives for how to read itself."
+        },
+        {
+          title: "When Prophets Admit They Might Be Wrong",
+          passage: "Mormon 8:12 / 1 Nephi 19:6",
+          focus: "Scripture's own honesty about its imperfection",
+          passages: [
+            {
+              ref: "Mormon 8:12",
+              source: "Book of Mormon",
+              text: "And whoso receiveth this record, and shall not condemn it because of the imperfections which are in it, the same shall know of greater things than these.",
+              context: "Moroni, finishing his father's record, openly admits the book contains imperfections and asks readers not to condemn it for them. This is scripture explicitly building in permission to notice its own flaws — a very different posture than claiming inerrancy.",
+              questions: [
+                "Moroni asks us not to 'condemn' the book for its imperfections. What's the difference between condemning a flaw and simply noticing it?",
+                "Why might a prophet choose to admit imperfection up front instead of claiming the record is flawless?",
+                "Does this change how you feel about noticing contradictions or hard passages elsewhere in scripture?"
+              ]
+            },
+            {
+              ref: "1 Nephi 19:6",
+              source: "Book of Mormon",
+              text: "But behold, I do not make myself perfect, and this weakness of mine, my father hath seen fit... for I know that the Lord God is merciful, and therefore I say unto you, that I go according to the plainness of the truth which is in the Lamb of God, that I may persuade men to salvation.",
+              context: "Nephi acknowledges his own limitations as a writer, even while claiming to write plainly and truthfully about what matters most. He separates 'perfect record' from 'true and useful record' — a distinction worth carrying into how we read the rest of scripture.",
+              questions: [
+                "Nephi separates being a perfect writer from writing something true and worth reading. Is that a useful distinction for how we read the Bible too?",
+                "What would change about how you read scripture if you approached every book expecting some human imperfection mixed in with real truth?",
+                "Is it possible for a book to be wrong about some historical or scientific details and still be right about the things that matter most? What's an example, if so?"
+              ]
+            }
+          ],
+          closing: "Both Nephi and Moroni tell us directly that their own writing is imperfect. If scripture is honest enough to say that about itself, we can be honest enough to notice it too — without that honesty threatening the truth underneath."
+        }
+      ]
+    },
+    {
+      id: "doubt-and-faith",
+      title: "Doubt Is Not the Enemy",
+      question: "Is it okay to not be sure?",
+      verse: "\u201CLord, I believe; help thou mine unbelief\u201D",
+      why: "Teenagers who feel like they're supposed to have certainty they don't actually have often just go quiet instead of asking. These sessions use scripture's own doubters — a resurrected Christ's own apostle, and a converted sinner building faith from nothing — to make room for real questions instead of performed certainty.",
+      sessions: [
+        {
+          title: "Thomas and the Wounds",
+          passage: "John 20:24-29",
+          focus: "Doubt met with evidence and patience, not shame",
+          passages: [
+            {
+              ref: "John 20:24-29",
+              source: "New Testament",
+              text: "Thomas... said unto them, Except I shall see in his hands the print of the nails... I will not believe... Jesus saith unto him, Thomas, because thou hast seen me, thou hast believed: blessed are they that have not seen, and yet have believed.",
+              context: "Thomas doesn't get punished for his doubt — he gets exactly what he asked for. Jesus meets him where he is, with evidence, rather than demanding he simply believe harder. The 'blessed are they that have not seen' line is often read as a rebuke, but it comes only after Jesus has already given Thomas what he needed.",
+              questions: [
+                "Jesus doesn't scold Thomas for doubting — he shows him the wounds. What does that tell you about how God responds to honest doubt versus performed certainty?",
+                "Is there a difference between doubting because you haven't looked, and doubting after you have looked hard and still aren't sure?",
+                "'Blessed are they that have not seen, and yet have believed' — is that a higher standard, or just a different path? Which one feels more like your own experience?"
+              ]
+            }
+          ],
+          closing: "Thomas is remembered by history as 'doubting Thomas' — but in the actual story, Jesus never shames him. He just shows up with evidence. That's worth remembering the next time doubt feels like something to hide."
+        },
+        {
+          title: "Alma's Experiment — Faith Without Certainty",
+          passage: "Alma 32:26-30",
+          focus: "Faith as something you test, not something you're handed whole",
+          passages: [
+            {
+              ref: "Alma 32:26-30",
+              source: "Book of Mormon",
+              text: "Now, as I said concerning faith — faith is not to have a perfect knowledge of things... if ye will awake and arouse your faculties, even to an experiment upon my words, and exercise a particle of faith... it will begin to swell within your breasts.",
+              context: "Alma is speaking to people who have been excluded from formal worship and have every reason to feel like faith isn't for them. His answer isn't 'just believe' — it's an actual experiment: plant something small, watch what happens, and decide from there. Faith here is explicitly defined as not having a perfect knowledge — doubt and faith aren't opposites in this framework, they coexist.",
+              questions: [
+                "Alma says faith is 'not to have a perfect knowledge' — meaning doubt is built into the definition of faith itself, not a failure of it. Does that match what you were taught faith means?",
+                "Alma describes faith as something you test in small pieces, like planting a seed, rather than something you either fully have or don't. Is there something in your own life — not necessarily religious — you've approached this way?",
+                "What would it look like to treat a specific belief you're unsure about as 'a particle' worth testing, rather than an all-or-nothing decision?"
+              ]
+            }
+          ],
+          closing: "Alma never asks for certainty up front — he asks for a small, honest experiment. If faith is built that way, then not being sure yet isn't a problem to solve before you start. It's the starting point itself."
+        }
+      ]
+    }
+  ]
+};
+
+FAMILY_GUIDES.push(HARD_QUESTIONS);
