@@ -1,4 +1,4 @@
-const CACHE_NAME = 'family-scripture-study-v1';
+const CACHE_NAME = 'family-scripture-study-v2';
 const ASSETS = [
   './',
   './index.html',
